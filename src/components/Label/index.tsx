@@ -1,15 +1,14 @@
-import { ViewProps } from 'react-native'
 import { Input } from '../Input'
 import { Container, LabelText } from './styles'
 
-type LabelProps = ViewProps & {
+type LabelProps = {
   title: string
   textarea?: boolean
 }
 
-export function Label({ title, textarea, ...rest }: LabelProps) {
+export function Label({ title, textarea }: LabelProps) {
   return (
-    <Container {...rest}>
+    <Container>
       <LabelText>{title}</LabelText>
       <Input textarea={textarea} />
     </Container>

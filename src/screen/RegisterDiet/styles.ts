@@ -14,16 +14,19 @@ export const LabelDateTimeContainer = styled.View`
   align-items: center;
   gap: 20px;
 `
+export const Label = styled.View`
+  gap: 8px;
+`
 export const LabelDateTime = styled.View`
   flex: 1;
   gap: 8px;
 `
-export const LabelDateTimeText = styled.Text`
+export const LabelText = styled.Text`
   font-family: ${({ theme }) => theme.fontFamily.bold};
   font-size: ${({ theme }) => theme.fontSize.sm}px;
   color: ${({ theme }) => theme.colors.gray_100};
 `
-export const LabelDateTimeInput = styled.TextInput`
+export const InputDateTime = styled.TextInput`
   padding: 14px;
   align-items: center;
   align-self: stretch;
@@ -39,6 +42,11 @@ type SelectButtonStyleProps = {
   type: 'primary' | 'secondary'
 }
 
+export const SelectButtonContainer = styled.View`
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+`
 export const SelectButton = styled.TouchableOpacity<SelectButtonStyleProps>`
   flex-grow: 1;
   flex-direction: row;

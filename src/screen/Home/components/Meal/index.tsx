@@ -3,17 +3,18 @@ import { Status } from '../../../../components/Status'
 import { Container, Info, InfoMeal, InfoTime, Separator } from './styles'
 
 type MealProps = {
+  id: string
   title: string
   meal: string
 }
 
-export function Meal({ title, meal }: MealProps) {
+export function Meal({ id, title, meal }: MealProps) {
   const navigation = useNavigation()
 
   return (
     <Container
       onPress={() =>
-        navigation.navigate('mealDetails', { pageTitle: 'Refeição' })
+        navigation.navigate('mealDetails', { pageTitle: 'Refeição', id })
       }
     >
       <Info>

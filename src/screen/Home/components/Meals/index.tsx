@@ -1,63 +1,49 @@
+import { useFocusEffect } from '@react-navigation/native'
+import { format, parseISO } from 'date-fns'
+import { useCallback, useState } from 'react'
 import { SectionList } from 'react-native'
-import { v4 as uuid } from 'uuid'
 import { EmptyMeals } from '../../../../components/EmptyMeals'
+import { getMealsFromAsyncStorage } from '../../../../storage/Meals/getAllMeals'
+import { AllMealsTypeDTO } from '../../../../storage/Meals/mealsStorageDTO'
 import { AddMeals } from '../AddMeals'
 import { Meal } from '../Meal'
 import { Container, Date } from './styles'
 
-const data = [
-  {
-    date: '12.12.12',
-    data: [
-      {
-        id: uuid(),
-        time: '8:00 AM',
-        food: 'Breakfast',
-        date: 'Mon Jul 03 2023 15:59:28 GMT-0300',
-        details: 'detalhes dos alimentos',
-      },
-      {
-        id: uuid(),
-        time: '12:00 PM',
-        food: 'Lunch',
-        date: 'Mon Jul 03 2023 15:59:28 GMT-0300',
-        details: 'detalhes dos alimentos',
-      },
-      {
-        id: uuid(),
-        time: '3:00 PM',
-        food: 'Snack',
-        date: 'Mon Jul 03 2023 15:59:28 GMT-0300',
-        details: 'detalhes dos alimentos',
-      },
-      {
-        id: uuid(),
-        time: '6:00 PM',
-        food: 'Dinner',
-        date: 'Mon Jul 03 2023 15:59:28 GMT-0300',
-        details: 'detalhes dos alimentos',
-      },
-      {
-        id: uuid(),
-        time: '9:00 PM',
-        food: 'Evening Snack',
-        date: 'Mon Jul 03 2023 15:59:28 GMT-0300',
-        details: 'detalhes dos alimentos',
-      },
-    ],
-  },
-]
-
 export function Meals() {
+  const [meals, setMeals] = useState<AllMealsTypeDTO>([])
+
+  async function fetchMealsData() {
+    try {
+      const meals = await getMealsFromAsyncStorage()
+      setMeals(meals)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchMealsData()
+    }, [])
+  )
+
   return (
     <Container>
       <AddMeals />
 
       <SectionList
-        sections={data}
+        sections={meals}
         keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <Meal title={item.time} meal={item.food} />}
-        renderSectionHeader={({ section: { data } }) => <Date>12.12.12</Date>}
+        renderItem={({ item }) => (
+          <Meal
+            id={item.id}
+            title={format(parseISO(item.time), 'HH:mm')}
+            meal={item.food}
+          />
+        )}
+        renderSectionHeader={({ section: { title } }) => (
+          <Date>{format(parseISO(title), 'dd/mm/yyyy')}</Date>
+        )}
         stickySectionHeadersEnabled={false}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ flex: 1, gap: 8 }}

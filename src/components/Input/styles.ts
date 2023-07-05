@@ -13,7 +13,7 @@ export const Container = styled.TextInput<InputStyleProps>`
   border-radius: 6px;
   border: 1px solid
     ${({ theme, isFocused }) =>
-      isFocused ? theme.colors.gray_500 : theme.colors.gray_500};
+      isFocused ? theme.colors.gray_300 : theme.colors.gray_500};
 
   vertical-align: ${(props) => (props.textarea ? 'top' : 'middle')};
   font-family: ${(props) => props.theme.fontFamily.regular};
