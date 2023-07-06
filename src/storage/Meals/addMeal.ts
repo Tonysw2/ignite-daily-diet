@@ -5,7 +5,6 @@ import { AllMealsTypeDTO, MealTypeDTO } from './mealsStorageDTO'
 
 export async function addMealToAsyncStorage(data: MealTypeDTO) {
   try {
-    // Get existing data from AsyncStorage
     const storage = await AsyncStorage.getItem(MEAL_KEY)
     const meals: AllMealsTypeDTO = storage ? JSON.parse(storage) : []
 
@@ -35,5 +34,6 @@ export async function addMealToAsyncStorage(data: MealTypeDTO) {
     }
   } catch (error) {
     console.error('Error adding data to AsyncStorage:', error)
+    throw error
   }
 }
