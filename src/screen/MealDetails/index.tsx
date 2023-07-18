@@ -5,12 +5,13 @@ import {
 } from '@react-navigation/native'
 import { PencilLine, Trash } from 'phosphor-react-native'
 import { useCallback, useState } from 'react'
-import { View } from 'react-native'
+import { Alert, View } from 'react-native'
 import { useTheme } from 'styled-components/native'
 import { Loading } from '../../components/Loading'
 import { Status } from '../../components/Status'
 import { getMealByIdFromAsyncStorage } from '../../storage/Meals/getMealById'
 import { MealTypeDTO } from '../../storage/Meals/mealsStorageDTO'
+import { removeMealFromAsyncStorage } from '../../storage/Meals/removeMeal'
 import { formatDate } from '../../utils/formatDate'
 import { formatTime } from '../../utils/formatTime'
 import {
@@ -39,6 +40,29 @@ export function MealDetails() {
     try {
       const meal = await getMealByIdFromAsyncStorage(id)
       setMeal(meal)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  async function removeMeal() {
+    try {
+      Alert.alert(
+        'Remover refeição',
+        'Essa refeição será deletada permanentemente, tem certeza que é isso que deseja?',
+        [
+          {
+            text: 'Sim',
+            onPress: async () => {
+              await removeMealFromAsyncStorage(id)
+              navigation.navigate('home')
+            },
+          },
+          {
+            text: 'Não',
+          },
+        ]
+      )
     } catch (error) {
       console.log(error)
     }
@@ -93,7 +117,7 @@ export function MealDetails() {
               <ButtonText>Editar refeição</ButtonText>
             </Button>
 
-            <Button type="secondary" activeOpacity={0.7}>
+            <Button type="secondary" activeOpacity={0.7} onPress={removeMeal}>
               <Trash size={18} color={theme.colors.gray_100} />
               <ButtonText>Excluir refeição</ButtonText>
             </Button>
