@@ -5,17 +5,19 @@ import { AllMealsTypeDTO } from './mealsStorageDTO'
 export async function getMealByIdFromAsyncStorage(id: string) {
   try {
     const storage = await AsyncStorage.getItem(MEAL_KEY)
+    const allSectionMeals: AllMealsTypeDTO = storage ? JSON.parse(storage) : []
 
-    if (!storage) {
-      return
+    const meal = allSectionMeals
+      .flatMap((section) => section.data)
+      .find((meal) => meal.id === id)
+
+    if (meal === undefined) {
+      throw { message: 'Não foi possível obter essa refeição' }
     }
 
-    const allSectionMeals: AllMealsTypeDTO = storage ? JSON.parse(storage) : []
-    const meal = allSectionMeals.filter((section) => {
-      section.data.filter((meal) => meal.id === id)
-    })
-    console.log(meal)
+    return meal
   } catch (error) {
     console.log(error)
+    throw error
   }
 }

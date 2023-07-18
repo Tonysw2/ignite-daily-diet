@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { isSameDay } from 'date-fns'
+import dayjs from 'dayjs'
 import { MEAL_KEY } from '../storageConfig'
 import { AllMealsTypeDTO, MealTypeDTO } from './mealsStorageDTO'
 
@@ -8,13 +8,19 @@ export async function addMealToAsyncStorage(data: MealTypeDTO) {
     const storage = await AsyncStorage.getItem(MEAL_KEY)
     const meals: AllMealsTypeDTO = storage ? JSON.parse(storage) : []
 
-    const dateExists = meals.filter((section) =>
-      isSameDay(section.title, data.date)
-    )
+    const dateExists = meals.filter((section) => {
+      const storageDate = dayjs(section.title)
+      const receivedDate = dayjs(data.date)
+
+      return dayjs(storageDate).isSame(receivedDate, 'day')
+    })
 
     if (dateExists.length > 0) {
       const updatedMeals = meals.map((section) => {
-        if (isSameDay(section.title, data.date)) {
+        const storageDate = dayjs(section.title)
+        const receivedDate = dayjs(data.date)
+
+        if (dayjs(storageDate).isSame(receivedDate, 'day')) {
           return {
             ...section,
             data: [...section.data, data],
@@ -25,12 +31,18 @@ export async function addMealToAsyncStorage(data: MealTypeDTO) {
       await AsyncStorage.setItem(MEAL_KEY, JSON.stringify(updatedMeals))
       return
     } else {
+      const storage = await AsyncStorage.getItem(MEAL_KEY)
+      const meals = storage ? JSON.parse(storage) : []
+
       const newSection = {
         title: data.date,
         data: [data],
       }
 
-      await AsyncStorage.setItem(MEAL_KEY, JSON.stringify([newSection]))
+      const updatedMeals = [newSection, ...meals]
+      console.log(updatedMeals)
+
+      await AsyncStorage.setItem(MEAL_KEY, JSON.stringify(updatedMeals))
     }
   } catch (error) {
     console.error('Error adding data to AsyncStorage:', error)

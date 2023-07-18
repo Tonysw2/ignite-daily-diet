@@ -63,6 +63,19 @@ export function AppRoutes() {
             },
           }}
         />
+
+        <Screen
+          name="update"
+          component={RegisterDiet}
+          options={{
+            header: () => {
+              return <ModalHeader />
+            },
+            contentStyle: {
+              backgroundColor: theme.colors.gray_500,
+            },
+          }}
+        />
       </Group>
     </Navigator>
   )

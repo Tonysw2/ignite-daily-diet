@@ -2,7 +2,6 @@ import DateTimePicker, {
   DateTimePickerEvent,
 } from '@react-native-community/datetimepicker'
 import { useNavigation } from '@react-navigation/native'
-import { format } from 'date-fns'
 import { useState } from 'react'
 import {
   Alert,
@@ -16,6 +15,8 @@ import { v4 as uuid } from 'uuid'
 import { Input } from '../../components/Input'
 import { Status } from '../../components/Status'
 import { addMealToAsyncStorage } from '../../storage/Meals/addMeal'
+import { formatDate } from '../../utils/formatDate'
+import { formatTime } from '../../utils/formatTime'
 import {
   ButtonIOS,
   ButtonRegister,
@@ -132,7 +133,7 @@ export function RegisterDiet() {
               {!showDateTimePicker.date ? (
                 <Pressable>
                   <InputDateTime
-                    value={format(date, 'dd/MM/yyyy')}
+                    value={formatDate(String(date))}
                     editable={false}
                     onPressIn={toggleDatePickerVisibility}
                   />
@@ -148,7 +149,7 @@ export function RegisterDiet() {
               {!showDateTimePicker.time ? (
                 <Pressable onPress={toggleTimePickerVisibility}>
                   <InputDateTime
-                    value={format(time, 'HH:mm')}
+                    value={formatTime(String(time))}
                     editable={false}
                     onPressIn={toggleTimePickerVisibility}
                   />

@@ -5,7 +5,7 @@ import { EmptyMeals } from '../../../../components/EmptyMeals'
 import { Loading } from '../../../../components/Loading'
 import { getMealsFromAsyncStorage } from '../../../../storage/Meals/getAllMeals'
 import { AllMealsTypeDTO } from '../../../../storage/Meals/mealsStorageDTO'
-import { formatDate, formatTime } from '../../../../utils/Formatter'
+import { formatDate } from '../../../../utils/formatDate'
 import { AddMeals } from '../AddMeals'
 import { Meal } from '../Meal'
 import { Container, Date } from './styles'
@@ -42,9 +42,7 @@ export function Meals() {
         <SectionList
           sections={meals}
           keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <Meal id={item.id} title={formatTime(item.time)} meal={item.food} />
-          )}
+          renderItem={({ item }) => <Meal meal={item} />}
           renderSectionHeader={({ section: { title } }) => (
             <Date>{formatDate(title)}</Date>
           )}

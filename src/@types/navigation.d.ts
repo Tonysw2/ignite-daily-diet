@@ -5,6 +5,7 @@ export declare global {
       feedback: undefined
       statistics: undefined
       register: { pageTitle: string }
+      update: { pageTitle: string }
       mealDetails: { pageTitle: string; id: string }
     }
   }

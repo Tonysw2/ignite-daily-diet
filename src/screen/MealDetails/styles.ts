@@ -42,18 +42,17 @@ export const TagText = styled.Text`
   font-size: ${(props) => props.theme.fontSize.sm}px;
   font-family: ${(props) => props.theme.fontFamily.regular};
 `
-export const Status = styled.View`
-  width: 8px;
-  height: 8px;
-  border-radius: 1000px;
-  background-color: ${(props) => props.theme.colors.green_dark};
+
+export const ButtonContainer = styled.View`
+  margin-top: auto;
+  gap: 12px;
 `
 
 type ButtonProps = {
   type: 'primary' | 'secondary'
 }
 
-export const Button = styled.View<ButtonProps>`
+export const Button = styled.TouchableOpacity<ButtonProps>`
   width: 100%;
   padding: 16px 24px;
   flex-direction: row;

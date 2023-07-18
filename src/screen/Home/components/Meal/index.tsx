@@ -1,29 +1,32 @@
 import { useNavigation } from '@react-navigation/native'
 import { Status } from '../../../../components/Status'
+import { MealTypeDTO } from '../../../../storage/Meals/mealsStorageDTO'
+import { formatTime } from '../../../../utils/formatTime'
 import { Container, Info, InfoMeal, InfoTime, Separator } from './styles'
 
 type MealProps = {
-  id: string
-  title: string
-  meal: string
+  meal: MealTypeDTO
 }
 
-export function Meal({ id, title, meal }: MealProps) {
+export function Meal({ meal }: MealProps) {
   const navigation = useNavigation()
 
   return (
     <Container
       onPress={() =>
-        navigation.navigate('mealDetails', { pageTitle: 'Refeição', id })
+        navigation.navigate('mealDetails', {
+          pageTitle: 'Refeições',
+          id: meal.id,
+        })
       }
     >
       <Info>
-        <InfoTime>{title}</InfoTime>
+        <InfoTime>{formatTime(meal.time)}</InfoTime>
         <Separator />
-        <InfoMeal>{meal}</InfoMeal>
+        <InfoMeal>{meal.food}</InfoMeal>
       </Info>
 
-      <Status size={14} type="primary" />
+      <Status size={14} type={meal.isHealthy ? 'primary' : 'secondary'} />
     </Container>
   )
 }

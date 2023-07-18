@@ -7,7 +7,7 @@ export function Header() {
   return (
     <Container>
       <Image source={Logo} />
-      <Avatar avatarUrl={''} />
+      <Avatar avatarUrl={'https://www.github.com/Tonysw2.png'} />
     </Container>
   )
 }
