@@ -3,7 +3,7 @@ import { useCallback, useState } from 'react'
 import { SectionList } from 'react-native'
 import { EmptyMeals } from '../../../../components/EmptyMeals'
 import { Loading } from '../../../../components/Loading'
-import { getMealsFromAsyncStorage } from '../../../../storage/Meals/getAllMeals'
+import { getAllMealsFromAsyncStorage } from '../../../../storage/Meals/getAllMeals'
 import { AllMealsTypeDTO } from '../../../../storage/Meals/mealsStorageDTO'
 import { formatDate } from '../../../../utils/formatDate'
 import { AddMeals } from '../AddMeals'
@@ -17,7 +17,7 @@ export function Meals() {
   async function fetchMealsData() {
     try {
       setIsLoading(true)
-      const storageMeals = await getMealsFromAsyncStorage()
+      const storageMeals = await getAllMealsFromAsyncStorage()
       setMeals(storageMeals)
     } catch (error) {
       console.log(error)

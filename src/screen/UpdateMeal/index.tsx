@@ -1,8 +1,13 @@
 import DateTimePicker, {
   DateTimePickerEvent,
 } from '@react-native-community/datetimepicker'
-import { useNavigation } from '@react-navigation/native'
-import { useState } from 'react'
+import {
+  useFocusEffect,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native'
+import dayjs from 'dayjs'
+import { useCallback, useState } from 'react'
 import {
   Alert,
   Keyboard,
@@ -11,10 +16,11 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { v4 as uuid } from 'uuid'
 import { Input } from '../../components/Input'
 import { Status } from '../../components/Status'
-import { addMealToAsyncStorage } from '../../storage/Meals/addMeal'
+import { getMealByIdFromAsyncStorage } from '../../storage/Meals/getMealById'
+import { MealTypeDTO } from '../../storage/Meals/mealsStorageDTO'
+import { updateMealFromAsyncStorage } from '../../storage/Meals/updateMeal'
 import { formatDate } from '../../utils/formatDate'
 import { formatTime } from '../../utils/formatTime'
 import {
@@ -35,17 +41,21 @@ import {
 } from './styles'
 
 export function UpdateMeal() {
-  const insets = useSafeAreaInsets()
-  const navigation = useNavigation()
-  const [isHealthy, setIsHealthy] = useState(true)
+  const [mealInfo, setMealInfo] = useState<MealTypeDTO>({} as MealTypeDTO)
   const [showDateTimePicker, setShowDateTimePicker] = useState({
     date: false,
     time: false,
   })
-  const [date, setDate] = useState(new Date())
-  const [time, setTime] = useState(new Date())
-  const [food, setFood] = useState('')
-  const [description, setDescription] = useState('')
+
+  const insets = useSafeAreaInsets()
+  const navigation = useNavigation()
+  const route = useRoute()
+  const { id } = route.params as { id: string }
+
+  async function getMealInfo() {
+    const meal = await getMealByIdFromAsyncStorage(id)
+    setMealInfo(meal)
+  }
 
   function toggleDatePickerVisibility() {
     setShowDateTimePicker((prev) => ({
@@ -53,6 +63,7 @@ export function UpdateMeal() {
       time: false,
     }))
   }
+
   function toggleTimePickerVisibility() {
     setShowDateTimePicker((prev) => ({
       date: false,
@@ -65,29 +76,43 @@ export function UpdateMeal() {
     selectDate: Date | undefined
   ) {
     if (type === 'set') {
-      selectDate ? setDate(selectDate) : null
+      selectDate
+        ? setMealInfo((prev) => ({
+            ...prev,
+            date: dayjs(selectDate).toString(),
+          }))
+        : null
     } else {
       toggleDatePickerVisibility()
     }
   }
+
   function handleChangeTimePicker(
     { type }: DateTimePickerEvent,
     selectDate: Date | undefined
   ) {
     if (type === 'set') {
-      selectDate ? setTime(selectDate) : null
+      selectDate
+        ? setMealInfo((prev) => ({
+            ...prev,
+            time: dayjs(selectDate).toString(),
+          }))
+        : null
     } else {
       toggleDatePickerVisibility()
     }
   }
+
   function handleNewFoodChangeText(text: string) {
-    setFood(text)
+    setMealInfo((prev) => ({ ...prev, food: text }))
   }
+
   function handleDescriptionChangeText(text: string) {
-    setDescription(text)
+    setMealInfo((prev) => ({ ...prev, description: text }))
   }
+
   async function handleSubmit() {
-    if (food.length === 0 || description.length === 0) {
+    if (mealInfo.food.length === 0 || mealInfo.description.length === 0) {
       Alert.alert(
         'Atenção',
         'Insira um nome ou descrição para poder adicionar a refeição.'
@@ -96,31 +121,30 @@ export function UpdateMeal() {
       return
     }
 
-    await addMealToAsyncStorage({
-      id: uuid(),
-      food,
-      description,
-      date: String(date),
-      time: String(time),
-      isHealthy,
-    })
+    await updateMealFromAsyncStorage(mealInfo)
 
     navigation.navigate('home')
   }
+
+  useFocusEffect(
+    useCallback(() => {
+      getMealInfo()
+    }, [])
+  )
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <Container>
         <Label>
           <LabelText>Nome</LabelText>
-          <Input onChangeText={handleNewFoodChangeText} value={food} />
+          <Input onChangeText={handleNewFoodChangeText} value={mealInfo.food} />
         </Label>
 
         <Label>
           <LabelText>Descrição</LabelText>
           <Input
             onChangeText={handleDescriptionChangeText}
-            value={description}
+            value={mealInfo.description}
             textarea
           />
         </Label>
@@ -133,7 +157,7 @@ export function UpdateMeal() {
               {!showDateTimePicker.date ? (
                 <Pressable>
                   <InputDateTime
-                    value={formatDate(String(date))}
+                    value={formatDate(mealInfo.date)}
                     editable={false}
                     onPressIn={toggleDatePickerVisibility}
                   />
@@ -149,7 +173,7 @@ export function UpdateMeal() {
               {!showDateTimePicker.time ? (
                 <Pressable onPress={toggleTimePickerVisibility}>
                   <InputDateTime
-                    value={formatTime(String(time))}
+                    value={formatTime(mealInfo.time)}
                     editable={false}
                     onPressIn={toggleTimePickerVisibility}
                   />
@@ -165,7 +189,7 @@ export function UpdateMeal() {
               display="spinner"
               themeVariant="dark"
               style={{ height: 125 }}
-              value={date ?? new Date()}
+              value={dayjs(mealInfo.date).toDate()}
               onChange={handleChangeDatePicker}
             />
 
@@ -189,7 +213,7 @@ export function UpdateMeal() {
               display="spinner"
               themeVariant="dark"
               style={{ height: 125 }}
-              value={date}
+              value={dayjs(mealInfo.time).toDate()}
               onChange={handleChangeTimePicker}
             />
 
@@ -209,8 +233,10 @@ export function UpdateMeal() {
         <SelectButtonContainer>
           <SelectButton
             type="primary"
-            isSelected={isHealthy}
-            onPress={() => setIsHealthy(true)}
+            isSelected={mealInfo.isHealthy}
+            onPress={() =>
+              setMealInfo((prev) => ({ ...prev, isHealthy: true }))
+            }
           >
             <Status size={8} type="primary" />
             <SelectButtonText>Sim</SelectButtonText>
@@ -218,8 +244,10 @@ export function UpdateMeal() {
 
           <SelectButton
             type="secondary"
-            isSelected={!isHealthy}
-            onPress={() => setIsHealthy(false)}
+            isSelected={!mealInfo.isHealthy}
+            onPress={() =>
+              setMealInfo((prev) => ({ ...prev, isHealthy: false }))
+            }
           >
             <Status size={8} type="secondary" />
             <SelectButtonText>Não</SelectButtonText>

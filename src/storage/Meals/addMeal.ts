@@ -1,12 +1,12 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import dayjs from 'dayjs'
 import { MEAL_KEY } from '../storageConfig'
-import { AllMealsTypeDTO, MealTypeDTO } from './mealsStorageDTO'
+import { getAllMealsFromAsyncStorage } from './getAllMeals'
+import { MealTypeDTO } from './mealsStorageDTO'
 
 export async function addMealToAsyncStorage(data: MealTypeDTO) {
   try {
-    const storage = await AsyncStorage.getItem(MEAL_KEY)
-    const meals: AllMealsTypeDTO = storage ? JSON.parse(storage) : []
+    const meals = await getAllMealsFromAsyncStorage()
 
     const dateExists = meals.filter((section) => {
       const storageDate = dayjs(section.title)
@@ -40,7 +40,6 @@ export async function addMealToAsyncStorage(data: MealTypeDTO) {
       }
 
       const updatedMeals = [newSection, ...meals]
-      console.log(updatedMeals)
 
       await AsyncStorage.setItem(MEAL_KEY, JSON.stringify(updatedMeals))
     }

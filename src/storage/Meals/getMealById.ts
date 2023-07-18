@@ -1,11 +1,8 @@
-import AsyncStorage from '@react-native-async-storage/async-storage'
-import { MEAL_KEY } from '../storageConfig'
-import { AllMealsTypeDTO } from './mealsStorageDTO'
+import { getAllMealsFromAsyncStorage } from './getAllMeals'
 
 export async function getMealByIdFromAsyncStorage(id: string) {
   try {
-    const storage = await AsyncStorage.getItem(MEAL_KEY)
-    const allSectionMeals: AllMealsTypeDTO = storage ? JSON.parse(storage) : []
+    const allSectionMeals = await getAllMealsFromAsyncStorage()
 
     const meal = allSectionMeals
       .flatMap((section) => section.data)

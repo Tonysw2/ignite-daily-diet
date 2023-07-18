@@ -83,7 +83,10 @@ export function MealDetails() {
               type="primary"
               activeOpacity={0.7}
               onPress={() =>
-                navigation.navigate('update', { pageTitle: 'Editar refeição' })
+                navigation.navigate('update', {
+                  pageTitle: 'Editar refeição',
+                  id: meal.id,
+                })
               }
             >
               <PencilLine size={18} color={theme.colors.gray_100} />

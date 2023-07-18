@@ -7,6 +7,7 @@ import { MealDetails } from '../screen/MealDetails'
 import { RegisterDiet } from '../screen/RegisterDiet'
 import { Statistics } from '../screen/Statistics'
 import { ModalHeaderStatistics } from '../screen/Statistics/components/ModalHeaderStatistics'
+import { UpdateMeal } from '../screen/UpdateMeal'
 const { Navigator, Screen, Group } = createNativeStackNavigator()
 
 export function AppRoutes() {
@@ -66,7 +67,7 @@ export function AppRoutes() {
 
         <Screen
           name="update"
-          component={RegisterDiet}
+          component={UpdateMeal}
           options={{
             header: () => {
               return <ModalHeader />
