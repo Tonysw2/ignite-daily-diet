@@ -3,7 +3,7 @@ export declare global {
     interface RootParamList {
       home: undefined
       feedback: undefined
-      statistics: undefined
+      statistics: { percentage: number }
       register: { pageTitle: string }
       update: { pageTitle: string; id: string }
       mealDetails: { pageTitle: string; id: string }

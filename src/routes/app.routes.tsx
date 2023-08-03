@@ -29,13 +29,20 @@ export function AppRoutes() {
         <Screen
           name="statistics"
           component={Statistics}
-          options={{
-            header: () => {
-              return <ModalHeaderStatistics />
-            },
-            contentStyle: {
-              backgroundColor: theme.colors.green_mid,
-            },
+          options={({ route }) => {
+            const { percentage } = route.params as { percentage: number }
+
+            return {
+              header: () => {
+                return <ModalHeaderStatistics />
+              },
+              contentStyle: {
+                backgroundColor:
+                  percentage >= 0.5
+                    ? theme.colors.green_mid
+                    : theme.colors.red_mid,
+              },
+            }
           }}
         />
 

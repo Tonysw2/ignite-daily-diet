@@ -1,47 +1,42 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import dayjs from 'dayjs'
 import { MEAL_KEY } from '../storageConfig'
-import { getAllMealsFromAsyncStorage } from './getAllMeals'
-import { MealTypeDTO } from './mealsStorageDTO'
+import { AllMealsTypeDTO, MealTypeDTO } from './mealsStorageDTO'
 
 export async function addMealToAsyncStorage(data: MealTypeDTO) {
   try {
-    const meals = await getAllMealsFromAsyncStorage()
+    const storage = await AsyncStorage.getItem(MEAL_KEY)
+    const meals: AllMealsTypeDTO = storage ? JSON.parse(storage) : []
 
-    const dateExists = meals.filter((section) => {
-      const storageDate = dayjs(section.title)
-      const receivedDate = dayjs(data.date)
+    if (meals.length === 0) {
+      const newSectionMeal = [
+        {
+          title: data.date,
+          data: [data],
+        },
+      ]
 
-      return dayjs(storageDate).isSame(receivedDate, 'day')
-    })
+      await AsyncStorage.setItem(MEAL_KEY, JSON.stringify(newSectionMeal))
+    }
 
-    if (dateExists.length > 0) {
-      const updatedMeals = meals.map((section) => {
-        const storageDate = dayjs(section.title)
-        const receivedDate = dayjs(data.date)
+    for (const section of meals) {
+      let index = 0
 
-        if (dayjs(storageDate).isSame(receivedDate, 'day')) {
-          return {
-            ...section,
-            data: [...section.data, data],
-          }
+      if (dayjs(section.title).isSame(data.date, 'date')) {
+        console.log(true, index)
+      } else {
+        const newSectionMeal = {
+          title: data.date,
+          data: [data],
         }
-      })
 
-      await AsyncStorage.setItem(MEAL_KEY, JSON.stringify(updatedMeals))
-      return
-    } else {
-      const storage = await AsyncStorage.getItem(MEAL_KEY)
-      const meals = storage ? JSON.parse(storage) : []
-
-      const newSection = {
-        title: data.date,
-        data: [data],
+        await AsyncStorage.setItem(
+          MEAL_KEY,
+          JSON.stringify([...meals, newSectionMeal])
+        )
       }
 
-      const updatedMeals = [newSection, ...meals]
-
-      await AsyncStorage.setItem(MEAL_KEY, JSON.stringify(updatedMeals))
+      index++
     }
   } catch (error) {
     console.error('Error adding data to AsyncStorage:', error)

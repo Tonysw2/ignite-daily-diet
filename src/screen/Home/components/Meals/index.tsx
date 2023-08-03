@@ -48,7 +48,7 @@ export function Meals() {
           )}
           stickySectionHeadersEnabled={false}
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ flex: 1, gap: 8 }}
+          contentContainerStyle={{ gap: 8 }}
           ListEmptyComponent={EmptyMeals}
         />
       )}
