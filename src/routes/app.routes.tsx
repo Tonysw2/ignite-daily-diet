@@ -8,6 +8,7 @@ import { RegisterDiet } from '../screen/RegisterDiet'
 import { Statistics } from '../screen/Statistics'
 import { ModalHeaderStatistics } from '../screen/Statistics/components/ModalHeaderStatistics'
 import { UpdateMeal } from '../screen/UpdateMeal'
+
 const { Navigator, Screen, Group } = createNativeStackNavigator()
 
 export function AppRoutes() {

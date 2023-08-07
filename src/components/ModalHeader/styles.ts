@@ -1,9 +1,16 @@
 import { View } from 'react-native'
 import styled from 'styled-components/native'
 
-export const Container = styled(View)`
+type ModalHeaderStyleProps = {
+  isHealthy: boolean
+}
+
+export const Container = styled(View)<ModalHeaderStyleProps>`
   height: 132px;
-  background-color: ${(props) => props.theme.colors.gray_500};
+  background-color: ${(props) =>
+    props.isHealthy
+      ? props.theme.colors.green_mid
+      : props.theme.colors.red_mid};
   flex-direction: row;
   align-items: center;
   justify-content: center;

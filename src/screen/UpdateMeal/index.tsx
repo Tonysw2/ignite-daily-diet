@@ -258,9 +258,10 @@ export function UpdateMeal() {
           style={{ marginBottom: insets.bottom }}
           onPress={handleSubmit}
         >
-          <ButtonUpdateText>Cadastrar refeição</ButtonUpdateText>
+          <ButtonUpdateText>Salvar alterações</ButtonUpdateText>
         </ButtonUpdate>
       </Container>
     </TouchableWithoutFeedback>
   )
 }
+11

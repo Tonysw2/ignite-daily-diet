@@ -5,6 +5,7 @@ import { Container, TitleScreen } from './styles'
 
 type RouteParams = {
   pageTitle: string
+  isHealthy: boolean
 }
 
 export function ModalHeader() {
@@ -12,10 +13,10 @@ export function ModalHeader() {
   const insets = useSafeAreaInsets()
 
   const route = useRoute()
-  const { pageTitle } = route.params as RouteParams
+  const { pageTitle, isHealthy } = route.params as RouteParams
 
   return (
-    <Container style={{ paddingTop: insets.top }}>
+    <Container isHealthy={isHealthy} style={{ paddingTop: insets.top }}>
       <ButtonIcon
         icon="arrow-left"
         style={{ position: 'absolute', top: insets.top + 28, left: 24 }}

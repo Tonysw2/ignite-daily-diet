@@ -87,14 +87,14 @@ export function RegisterDiet() {
   }
 
   async function handleSubmit() {
-    // if (food.length === 0 || description.length === 0) {
-    //   Alert.alert(
-    //     'Atenção',
-    //     'Insira um nome ou descrição para poder adicionar a refeição.'
-    //   )
+    if (food.length === 0 || description.length === 0) {
+      Alert.alert(
+        'Atenção',
+        'Insira um nome ou descrição para poder adicionar a refeição.'
+      )
 
-    //   return
-    // }
+      return
+    }
 
     await addMealToAsyncStorage({
       id: uuid(),

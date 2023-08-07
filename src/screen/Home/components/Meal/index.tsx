@@ -15,8 +15,9 @@ export function Meal({ meal }: MealProps) {
     <Container
       onPress={() =>
         navigation.navigate('mealDetails', {
-          pageTitle: 'Refeições',
+          pageTitle: 'Refeição',
           id: meal.id,
+          isHealthy: meal.isHealthy,
         })
       }
     >

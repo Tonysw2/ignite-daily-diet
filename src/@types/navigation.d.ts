@@ -6,7 +6,7 @@ export declare global {
       statistics: { percentage: number }
       register: { pageTitle: string }
       update: { pageTitle: string; id: string }
-      mealDetails: { pageTitle: string; id: string }
+      mealDetails: { pageTitle: string; id: string; isHealthy: boolean }
     }
   }
 }
