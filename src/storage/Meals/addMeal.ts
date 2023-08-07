@@ -7,37 +7,39 @@ export async function addMealToAsyncStorage(data: MealTypeDTO) {
   try {
     const storage = await AsyncStorage.getItem(MEAL_KEY)
     const meals: AllMealsTypeDTO = storage ? JSON.parse(storage) : []
+    console.log(data)
 
-    if (meals.length === 0) {
-      const newSectionMeal = [
-        {
-          title: data.date,
-          data: [data],
-        },
-      ]
+    let hasChanged = false
 
-      await AsyncStorage.setItem(MEAL_KEY, JSON.stringify(newSectionMeal))
-    }
+    const updatedMeals = meals.map((section) => {
+      const sectionDate = dayjs(section.title)
+      const mealsDate = dayjs(data.date)
 
-    for (const section of meals) {
-      let index = 0
-
-      if (dayjs(section.title).isSame(data.date, 'date')) {
-        console.log(true, index)
-      } else {
-        const newSectionMeal = {
-          title: data.date,
-          data: [data],
-        }
-
-        await AsyncStorage.setItem(
-          MEAL_KEY,
-          JSON.stringify([...meals, newSectionMeal])
-        )
+      if (dayjs(sectionDate).isSame(mealsDate, 'day')) {
+        hasChanged = true
+        return { ...section, data: [data, ...section.data] }
       }
 
-      index++
+      return section
+    })
+
+    if (hasChanged) {
+      hasChanged = false
+      console.log('add in existent')
+      return await AsyncStorage.setItem(MEAL_KEY, JSON.stringify(updatedMeals))
     }
+
+    const updatedMealsWithSection = [
+      { title: data.date, data: [data] },
+      ...meals,
+    ]
+
+    console.log('added new section')
+
+    return await AsyncStorage.setItem(
+      MEAL_KEY,
+      JSON.stringify(updatedMealsWithSection)
+    )
   } catch (error) {
     console.error('Error adding data to AsyncStorage:', error)
     throw error

@@ -9,9 +9,6 @@ import { ThemeProvider } from 'styled-components/native'
 import { Loading } from './src/components/Loading'
 import { Routes } from './src/routes'
 import theme from './src/theme'
-import { resetMealsFromAsyncStorage } from './src/storage/Meals/resetMeals'
-
-// resetMealsFromAsyncStorage()
 
 export default function App() {
   const [fontsLoaded] = useFonts({ NunitoSans_400Regular, NunitoSans_700Bold })

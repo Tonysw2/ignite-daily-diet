@@ -59,7 +59,6 @@ export function RegisterDiet() {
       time: !prev.time,
     }))
   }
-
   function handleChangeDatePicker(
     { type }: DateTimePickerEvent,
     selectDate: Date | undefined
@@ -86,15 +85,16 @@ export function RegisterDiet() {
   function handleDescriptionChangeText(text: string) {
     setDescription(text)
   }
-  async function handleSubmit() {
-    if (food.length === 0 || description.length === 0) {
-      Alert.alert(
-        'Atenção',
-        'Insira um nome ou descrição para poder adicionar a refeição.'
-      )
 
-      return
-    }
+  async function handleSubmit() {
+    // if (food.length === 0 || description.length === 0) {
+    //   Alert.alert(
+    //     'Atenção',
+    //     'Insira um nome ou descrição para poder adicionar a refeição.'
+    //   )
+
+    //   return
+    // }
 
     await addMealToAsyncStorage({
       id: uuid(),
