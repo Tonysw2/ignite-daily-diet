@@ -19,7 +19,6 @@ export function Meals() {
       setIsLoading(true)
       const storageMeals = await getAllMealsFromAsyncStorage()
       setMeals(storageMeals)
-      console.log(storageMeals)
     } catch (error) {
       console.log(error)
     } finally {

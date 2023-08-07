@@ -9,9 +9,15 @@ import { ThemeProvider } from 'styled-components/native'
 import { Loading } from './src/components/Loading'
 import { Routes } from './src/routes'
 import theme from './src/theme'
+import { useEffect } from 'react'
+import { resetMealsFromAsyncStorage } from './src/storage/Meals/resetMeals'
 
 export default function App() {
   const [fontsLoaded] = useFonts({ NunitoSans_400Regular, NunitoSans_700Bold })
+
+  // useEffect(() => {
+  //   resetMealsFromAsyncStorage()
+  // }, [])
 
   return (
     <ThemeProvider theme={theme}>

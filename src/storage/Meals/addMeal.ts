@@ -7,7 +7,6 @@ export async function addMealToAsyncStorage(data: MealTypeDTO) {
   try {
     const storage = await AsyncStorage.getItem(MEAL_KEY)
     const meals: AllMealsTypeDTO = storage ? JSON.parse(storage) : []
-    console.log(data)
 
     let hasChanged = false
 
