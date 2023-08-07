@@ -54,7 +54,7 @@ export function MealDetails() {
           {
             text: 'Sim',
             onPress: async () => {
-              await removeMealFromAsyncStorage(id)
+              await removeMealFromAsyncStorage(meal!)
               navigation.navigate('home')
             },
           },

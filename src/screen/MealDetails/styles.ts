@@ -1,5 +1,9 @@
 import styled from 'styled-components/native'
 
+type MealDetailsStyleProps = {
+  isHealthy: boolean
+}
+
 export const Container = styled.View`
   flex: 1;
   padding: 40px 24px;

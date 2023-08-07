@@ -63,14 +63,16 @@ export function AppRoutes() {
         <Screen
           name="mealDetails"
           component={MealDetails}
-          options={{
+          options={({ route }) => ({
             header: () => {
               return <ModalHeader />
             },
             contentStyle: {
-              backgroundColor: theme.colors.gray_500,
+              backgroundColor: route.params?.isHealthy
+                ? theme.colors.green_mid
+                : theme.colors.red_mid,
             },
-          }}
+          })}
         />
 
         <Screen

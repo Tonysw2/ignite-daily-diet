@@ -10,6 +10,8 @@ export const Container = styled(View)<ModalHeaderStyleProps>`
   background-color: ${(props) =>
     props.isHealthy
       ? props.theme.colors.green_mid
+      : props.isHealthy === undefined
+      ? props.theme.colors.gray_500
       : props.theme.colors.red_mid};
   flex-direction: row;
   align-items: center;
