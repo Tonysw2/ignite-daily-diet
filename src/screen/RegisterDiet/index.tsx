@@ -42,6 +42,7 @@ export function RegisterDiet() {
     date: false,
     time: false,
   })
+  console.log(showDateTimePicker)
   const [date, setDate] = useState(new Date())
   const [time, setTime] = useState(new Date())
   const [food, setFood] = useState('')
@@ -64,6 +65,12 @@ export function RegisterDiet() {
     selectDate: Date | undefined
   ) {
     if (type === 'set') {
+      if (Platform.OS === 'android') {
+        toggleDatePickerVisibility()
+        selectDate ? setDate(selectDate) : null
+        return
+      }
+
       selectDate ? setDate(selectDate) : null
     } else {
       toggleDatePickerVisibility()
@@ -74,9 +81,15 @@ export function RegisterDiet() {
     selectDate: Date | undefined
   ) {
     if (type === 'set') {
+      if (Platform.OS === 'android') {
+        toggleTimePickerVisibility()
+        selectDate ? setTime(selectDate) : null
+        return
+      }
+
       selectDate ? setTime(selectDate) : null
     } else {
-      toggleDatePickerVisibility()
+      toggleTimePickerVisibility()
     }
   }
   function handleNewFoodChangeText(text: string) {
@@ -131,7 +144,7 @@ export function RegisterDiet() {
               <LabelText>Data</LabelText>
 
               {!showDateTimePicker.date ? (
-                <Pressable>
+                <Pressable onPress={toggleDatePickerVisibility}>
                   <InputDateTime
                     value={formatDate(String(date))}
                     editable={false}
@@ -163,8 +176,8 @@ export function RegisterDiet() {
           <>
             <DateTimePicker
               display="spinner"
-              themeVariant="dark"
               style={{ height: 125 }}
+              themeVariant="dark"
               value={date ?? new Date()}
               onChange={handleChangeDatePicker}
             />
